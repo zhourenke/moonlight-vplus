@@ -45,6 +45,11 @@ jobs:
           ref: ${{ env.AUDIO_HAPTICS_SDK_REF }}
           path: .deps/moonlight-audio-haptics
 
+      # ===== 诊断补丁：触摸/笔 MOVE 改走可靠通道，绕开 ENet packetThrottle =====
+      # 只改编译产物，不改子模块提交（CI checkout 时已递归拉取 moonlight-common-c 源码）
+      - name: Patch touch input to RELIABLE (diagnostic build)
+        run: python3 .github/patch-touch-reliable.py app/src/main/jni/moonlight-core/moonlight-common-c/src/InputStream.c
+
       - name: Set up JDK 17
         uses: actions/setup-java@v4
         with:
